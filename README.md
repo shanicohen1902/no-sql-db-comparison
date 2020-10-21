@@ -2,7 +2,7 @@
 
 # Select DB – how to?
 
-[NoSQL Db characteristics] (#NoSQL-Db-characteristics) \
+[NoSQL Db characteristics](#nosql-db-characteristics) \
 NoSQL Database Types 	\
 MongoDB 	\
 Redis \
