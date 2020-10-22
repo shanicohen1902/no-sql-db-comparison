@@ -3,45 +3,47 @@
 # Select DB – how to?
 
 [NoSQL Db characteristics](#nosql-db-characteristics) \
-NoSQL Database Types 	\
-MongoDB 	\
-Redis \
-Elasticsearch \
-Cassandra\
-CouchBase \
+[NoSQL Database Types](#nosql-database-types) 	\
+[MongoDB](#mongodb)	\
+[Redis](#redis) \
+[Elasticsearch](#elasticsearch) \
+[Cassandra](#cassandra) \
+[CouchBase](#couchbase)
 
 
 # NoSQL Db characteristics
-Semi-structured/ unstructured
-Limited transactions support (different for each product)
-Scale horizontally ability
-Fast – high performance
-Querying language – not SQL!
-Capabilities to store large volume of data (in Terabyte range)
-When aggregation is natural , the development make easier.
-Database denormalization - Query first approach. design our tables for queries. no joins - read or write to one table. The process of multiple data across tables calls denormalization. 
-We need to understand the toolset for each Database. Find a solution that could answer our problem. 
-Considerations of choosing Database:
-Requirements. how do we need to read the data. Do we need schema type?
-Non-functional requirements. 
-Performance
-Scale – data volume + load
-Consistency vs Availability
-Cost – consider software cost + maintenance
-Integration considerations – Existing technologies that need to integrate. 
-Existing dev team skills
-CAP – choose only two: AP/AC
-Consistency
-Availability
-Partition tolerance
+
+ - Semi-structured/ unstructured
+ - Limited transactions support (different for each product)
+ - Scale horizontally ability
+ - Fast – high performance
+ - Querying language – not SQL!
+ - Capabilities to store large volume of data (in Terabyte range)
+ - When aggregation is natural , the development make easier.
+ - Database denormalization - Query first approach. design our tables for queries.
+ - no joins - read or write to one table. The process of multiple data across tables calls denormalization. 
+**We need to understand the toolset for each Database. Find a solution that could answer our problem.** 
+## Considerations of choosing Database:
+Requirements - how do we need to read the data. Do we need schema type?
+ - Non-functional requirements. 
+ - Performance
+ - Scale – data volume + load
+ - Consistency vs Availability
+ - Cost – consider software cost + maintenance
+  - Integration considerations – Existing technologies that need to integrate. 
+ - Existing dev team skills
+ - CAP – choose only two: AP/AC
+	 - Consistency
+   - Availability
+   - Partition tolerance
 On distributed NoSQL databases, basically you need to choose between AP to CP. Partition tolerance is a basic requirement from distributed system.
-Keep it simple…
-NoSQL Database types
-Key Value
-Document Store
-Column-oriented
-Graph
-Key-value store
+ - Keep it simple…
+# NoSQL Database types
+[Key Value](%28#key-value-store%29)
+[Document Store](%28#document-store-database%29)
+[Column-oriented](%28#column-databases-/-wide-column-store%29)
+[Graph](%28#graph-databases%29)
+### Key-value store
 Store simple data, accessible through a key
 Read/write by key. The data can be from many types – Json/image/Object/Text
 Simple schema
@@ -51,7 +53,7 @@ Caching feature
 When to use?  The data that might be represented by a key-value like configuration, flags, Session management, User preferences
 When to avoid? When there is need to interact with the data itself.
 Examples – Redis, Amazon DynamoDB, Aerospike
-Document store Database
+### Document store Database
 Similar to key-value.  Store data in structured formats called documents, often using formats like JSON, BSON, or XML.
 The content stored in the document can be queried and analyzed.
 Flex schema
@@ -66,7 +68,7 @@ small number of big documents.
 potentially allows information to be read or written in a single operation. This improve  atomicity and scalability, due to a fewer relations between independent objects. 
 large number of simple documents. Appropriate when data-size needs to be kept small, in order to reduce latency. Documents can refer to each other by key.
 
-Column Databases / wide-column store
+### Column Databases / wide-column store
 A column-oriented database stores columns sequentially. Each column will be stored in sequential blocks. Good for analytical queries that perform aggregate operations (column actions).
 When there is a need for retrieval a few columns from a table with many columns, Row-Oriented Database has to skip over unnecessary data. 
 Store & analyze big Data sets
@@ -79,7 +81,7 @@ Single row operations are slow (use batch, work with bulks). Saves storage: no n
 
 Examples- Cassandra, InfiniDB, HBase
 
-Graph Databases
+### Graph Databases
 Store and querying relationships between objects. Logical structure represents data relationships. 
 Edge - relationship. Edge have a direction.
 Vertex - object
@@ -95,7 +97,7 @@ To edges
 Filtering with traversals
 Examples – Neo4j, Amazon Neptune
 
-MongoDB
+# MongoDB
 Type: Document storage
 
 MongoDB is a NoSQL database, uses JSON-like documents with optional schemas. It designed for ease of development and scaling.
@@ -146,7 +148,7 @@ Atomic - Multi-document transactions are atomic. A transaction will not commit s
 
 
 
-Redis
+# Redis
 type: key-value
 Redis is an open source , in-memory data structure store, used as a database, cache and message broker.
 Cache or database?
@@ -207,7 +209,7 @@ Search: title=”art” -> search for all the documents
 TF-ITF for relevance 
 
 
-Elasticsearch
+# Elasticsearch
 Search engine based on Lucene. Started as horizontal scalable Lucene. Very fast for search operations. 
 Not just for text search! Can handle structured/aggregated data
 Part of the Elastic Stack – Kibana (UI Visualization), Logstash Beats (Streaming data into Elastic), X-Pack (Security, Alerting, Monitoring)
@@ -234,7 +236,7 @@ Read heavy is a good case – Add more replicas.
 
 
 
-Cassandra
+# Cassandra
 type: column-oriented DB
 Apache Cassandra is an open-source, distributed, NoSQL database. It presents a partitioned wide column storage model with eventually consistent semantics.
 License: Apache
@@ -291,7 +293,7 @@ SSTables are flushed to disk from Memtables or are streamed from other nodes.
 CAP
 Cassandra chooses Availability and Partition Tolerance from the CAP. 
  
-CouchBase  (Couchbase Server)
+# CouchBase
 Type: document store
 Couchbase Server is an open source, distributed data-platform.
 Language: N1QL (sql-like). Data document type: JSON
@@ -367,7 +369,7 @@ words/documents.
  
 
 
-Note to myself - 
+#notes - 
  Availability - the percentage of time that an asset is operating, compared to its total scheduled operation time. Alternatively, availability can be defined as the duration of time that a plant or particular equipment is able to perform its intended tasks.
  Reliability - Reliability quantifies the likelihood of equipment to operate as intended without disruptions or downtime. In other words, reliability can be seen as the probability of success and the dependability of an asset to continuously be operational, without failures, for a period of time.
 Durability - Durability  refers to long-term data protection, i.e. the stored data does not suffer from bit rot, degradation or other corruption. Rather than focusing on hardware redundancy, it is concerned with data redundancy so that data is never lost or compromised.
