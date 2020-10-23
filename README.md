@@ -251,7 +251,7 @@ License: Apache\
  - Durability - guarantees data durability by using replicas
  - Eventual Consistency of writes to a single table
  - Lightweight transactions with linearizable consistency (Isolation)
- - Batched writes across multiple tables are guaranteed to succeed completely or not at all\
+ - Batched writes across multiple tables are guaranteed to succeed completely or not at all
  - Secondary indexes are guaranteed to be consistent with their local replicas data\
   	Main point:  Store huge dataset in “almost SQL”
 Query Language: CQ,  an SQL-like language.\
@@ -273,7 +273,7 @@ Replication factor - defines how many replicas.\
 Rack - a cluster of connected machines in a data center. Data Center contains multiple racks. The rack contains one or more nodes.\ 
 Replication strategy - defines which nodes the data replicated.\
 Simple Strategy - For any keyspace, define how many replicas.\
-For example, if we have an eight node cluster, and a replication factor of 3, then to find the owning nodes for a key we first hash that key to generate a token (which is just the hash of the key), and then we “walk” the ring in a clockwise fashion until we encounter three distinct nodes, at which point we have found all the replicas of that key.\
+For example, if we have an eight node cluster, and a replication factor of 3, then to find the owning nodes for a key we first hash that key to generate a token (which is just the hash of the key), and then we “walk” the ring in a clockwise fashion until we encounter three distinct nodes, at which point we have found all the replicas of that key.
  
 
  
@@ -282,10 +282,11 @@ Network topology strategy - allows a replication factor to be specified for each
 **Consistency Levels**
 In Cassandra, you choose consistency level which allows the operator to pick reads (R) and writes (W) behavior without knowing the replication factor.\
 Generally, writes will be visible to subsequent reads when the read consistency level contains enough nodes to guarantee a quorum\ intersection with the write consistency level.\
-Consistency levels  - https://cassandra.apache.org/doc/latest/architecture/dynamo.html?highlight=rack#tunable-consistency\
+Consistency levels - https://cassandra.apache.org/doc/latest/architecture/dynamo.html?highlight=rack#tunable-consistency. 
+
 **Write path:**  are always sent to all replicas, regardless of consistency level. The consistency level simply controls how many responses the coordinator waits for before responding to the client.\
 **Read path:**  the coordinator generally only issues read commands to enough replicas to satisfy the consistency level.\
-Failure detection - based on a gossip protocol\
+Failure detection - based on a gossip protocol
 ### Transactions
 Isolation - with compare and set (CAS) 
 ### Durability
@@ -293,10 +294,10 @@ Commitlogs are an append only log of all mutations local to a Cassandra node.\
 Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdowns.\
 Memtables are in-memory structures where Cassandra buffers writes.\
 In general, there is one active memtable per table.\
-Memtables may be stored entirely on-heap or partially off-heap, depending on the configuration.\
+Memtables may be stored entirely on-heap or partially off-heap, depending on the configuration.
 
 SSTables are the immutable data files that Cassandra uses for persisting data on disk.\
-SSTables are flushed to disk from Memtables or are streamed from other nodes.\
+SSTables are flushed to disk from Memtables or are streamed from other nodes.
 
 ### CAP
 Cassandra chooses Availability and Partition Tolerance from the CAP. 
@@ -315,7 +316,7 @@ Parallel query processing -  for execute complex, long-running queries that cont
 High availability - all operations can be done while the system remains online.\
 Use at: Linkedin, paypal,ebay\
 ***CouchBase Services:***
-The services can be deployed and maintained independently of one another (mix & match)\
+The services can be deployed and maintained independently of one another (mix & match)
  - Data: Supports the storing, setting, and retrieving of data-items, specified by key.
  - Query: Parses queries specified in the N1QL query-language, executes the queries, and returns results. The Query Service interacts with both the Data and Index services.
  - Index: Creates indexes, for use by the Query Service.
@@ -337,7 +338,7 @@ By caching frequently-used data, Memcached buckets reduce the number of queries 
 
 
 ### Durability
-Clients writing to Couchbase Server can optionally specify durability requirements, which instruct Couchbase Server to update the specified document on multiple nodes in memory and/or disk locations across the cluster, before considering the write to be committed.\ The greater the number of memory and/or disk locations specified in the requirements, the greater the level of durability achieved.
+Clients writing to Couchbase Server can optionally specify durability requirements, which instruct Couchbase Server to update the specified document on multiple nodes in memory and/or disk locations across the cluster, before considering the write to be committed.  The greater the number of memory and/or disk locations specified in the requirements, the greater the level of durability achieved.
 
 ### CAP - CP
 Couchbase Server acts like a CP system in its default configuration. This is because any access to a given key (read, write, update, delete) is always directed to the node that hosts that active data at that point in time\
