@@ -163,7 +163,7 @@ Bucketing – store multiples key-value couples in one hash (less key overhead)\
 Can be used as a pub-sub
 
   	Main point:  Fast!
-License: BSD\
+License: BSD
 	
 
 
@@ -172,7 +172,7 @@ License: BSD\
 Isolation - A basic transaction provides the opportunity for one client to execute multiple commands without other clients interrupt them. 
 Atomic - Either all of the commands or none are processed\
 Locking - Optimistic locking\
-Optimistic – check and set, pessimistic – locks\
+Optimistic – check and set, pessimistic – locks
 
 ### Replication (by Redis cluster)
 For creating a distributed environment of Redis you have 2 options - Redis Sential (does not distribute data, only prevents failovers) and Redis Cluster\
@@ -181,13 +181,13 @@ Redis Cluster principles:\
 Master-Slave Architecture \
 The client can connect any node, the node responsible to route the query if it can’t handle it to the correct node (Asynchronous replication)
  Auto healing.  There is a quorum that needs to agree on a master election and part of the system may become unavailable till the reelection ends\
-Cluster bus - Every node is connected to every other node in the cluster using the cluster bus. The Cluster bus is used by nodes for failure detection, configuration update and failover authorization\
+Cluster bus - Every node is connected to every other node in the cluster using the cluster bus. The Cluster bus is used by nodes for failure detection, configuration update and failover authorization
 
 **Write path:**
 To the master. Asynchrony replicates to slaves. 
 A master failure before asynchronous streaming of data to a slave would lead to data loss. Mechanisms such as multipath writes and disk replication can be used to prevent it.
 There is an option to enhance consistency by ‘WAIT’ – success only after replicating to other nodes. 
-Read operation:
+***Read path:***
 From master. There is an option to scale reads by read-only nodes. Read-only nodes can accept reads and may retrieve stale data (eventual consistency).
 ### Partitions 
 
@@ -211,99 +211,108 @@ TF-ITF for relevance
 
 
 # Elasticsearch
-Search engine based on Lucene. Started as horizontal scalable Lucene. Very fast for search operations. 
+Search engine based on Lucene.
+Started as horizontal scalable Lucene. 
+Very fast for search operations. 
 Not just for text search! Can handle structured/aggregated data\
 Part of the Elastic Stack – Kibana (UI Visualization), Logstash Beats (Streaming data into Elastic), X-Pack (Security, Alerting, Monitoring)\
 Interface - Client API/Restful API + JSON/Analytic tools (like Kibana)\
-Lucene terms:
-Document - The stored document. (document is equivalent to a row in RDBMS)
-Field - A document contains a list of fields, or key-value pairs. The value can be a simple (scalar) value (eg a string, integer, date), or a nested structure like an array or an object.
-Term - A term is an exact value that is indexed in Elasticsearch. Terms can be searched for using term queries.
-Index – Like a DB table. Contains inverted indexes that let you search across all documents. Manages as a collection of shards - an index is a logical namespace that points to primary and replica shards.
+**Lucene terms:**
+Document - The stored document. (document is equivalent to a row in RDBMS)\
+Field - A document contains a list of fields, or key-value pairs. The value can be a simple (scalar) value (eg a string, integer, date), or a nested structure like an array or an object.\
+Term - A term is an exact value that is indexed in Elasticsearch. Terms can be searched for using term queries.\
+Index – Like a DB table. Contains inverted indexes that let you search across all documents. Manages as a collection of shards - an index is a logical namespace that points to primary and replica shards.\
 Type – type defines the schema and mapping shard by documents that represent the same thing. (A log entry, an article…). In Elastic 6, only one type is allowed per index.
 
-Licence: Apache\
+Licence: Apache
 ### Partitioning
-A shard is a single Lucene instance. It is a low-level “worker” unit which is managed automatically by Elasticsearch. 
-By default, an index has one primary shard. You can specify more primary shards to scale the number of documents that your index can handle.  Elasticsearch distributes shards amongst all nodes in the cluster, and can move shards automatically from one node to another in the case of a node failure, or the addition of new nodes.
+A shard is a single Lucene instance. It is a low-level “worker” unit which is managed automatically by Elasticsearch.\
+By default, an index has one primary shard. You can specify more primary shards to scale the number of documents that your index can handle.\
+Elasticsearch distributes shards amongst all nodes in the cluster, and can move shards automatically from one node to another in the case of a node failure, or the addition of new nodes.\
 Elastic routs the documents based on ID hashing. This value can be overridden by specifying a routing value.
 ### Replication
 Single master Architecture\
 Automatic failover. Elastic selects a new primary\
-Read - Round robin requests among nodes. any node can handle read requests. 
-Write – to the Primary. When you index a document, it is indexed first on the primary shard, then on all replicas of the primary shard.
-Scale writes - The number of primary Shards cannot be changed later. It is difficult to scale writes. In the worst-case – re-index.
+**Read path** - Round robin requests among nodes. any node can handle read requests.\
+**Write path** – to the Primary. When you index a document, it is indexed first on the primary shard, then on all replicas of the primary shard.
+Scale writes - The number of primary Shards cannot be changed later. It is difficult to scale writes. In the worst-case – re-index.\
 Read heavy is a good case – Add more replicas.
 
 
 
 # Cassandra
-type: column-oriented DB
-Apache Cassandra is an open-source, distributed, NoSQL database. It presents a partitioned wide column storage model with eventually consistent semantics.
+type: column-oriented DB\
+Apache Cassandra is an open-source, distributed, NoSQL database.\
+It presents a partitioned wide column storage model with eventually consistent semantics.
 License: Apache\
-Cassandra makes the following guarantees.
-High Scalability - nodes can be added/removed as needed. Linear throughput increasing when adding nodes\
-High Availability -  fault-tolerant storage system\
-Durability - guarantees data durability by using replicas\
-Eventual Consistency of writes to a single table\
-Lightweight transactions with linearizable consistency (Isolation)\
-Batched writes across multiple tables are guaranteed to succeed completely or not at all\
-Secondary indexes are guaranteed to be consistent with their local replicas data\
+**Cassandra makes the following guarantees:**
+ - High Scalability - nodes can be added/removed as needed. Linear throughput increasing when adding nodes
+ - High Availability -  fault-tolerant storage system
+ - Durability - guarantees data durability by using replicas
+ - Eventual Consistency of writes to a single table
+ - Lightweight transactions with linearizable consistency (Isolation)
+ - Batched writes across multiple tables are guaranteed to succeed completely or not at all\
+ - Secondary indexes are guaranteed to be consistent with their local replicas data\
   	Main point:  Store huge dataset in “almost SQL”
-Query Language: CQ,  an SQL-like language.
+Query Language: CQ,  an SQL-like language.\
 ***Cassandra terms:***
-Keyspace: defines how a dataset is replicated, for example in which datacenters and how many copies. Keyspaces contain tables. 
-Column Family (Table): defines the typed schema for a collection of partitions. Cassandra tables have flexible addition of new columns to tables with zero downtime. Tables contain partitions, which contain columns.
-Partition key: a key all rows in Cassandra must-have. All performant queries supply the partition key in the query.
-Row: a collection of columns identified by a unique primary key.
-Column: A single datum with a type that belongs to a row.
+  - Keyspace: defines how a dataset is replicated, for example in which datacenters and how many copies. Keyspaces contain tables. 
+ - Column Family (Table): defines the typed schema for a collection of partitions. Cassandra tables have flexible addition of new columns to tables with zero downtime. Tables contain partitions, which contain columns.
+ - Partition key: a key all rows in Cassandra must-have. All performant queries supply the partition key in the query.
+ - Row: a collection of columns identified by a unique primary key.
+ - Column: A single datum with a type that belongs to a row.
 
-In Cassandra, users can safely add columns to existing Cassandra databases while remaining confident that query performance will not degrade.
+In Cassandra, users can safely add columns to existing Cassandra databases while remaining confident that query performance will not degrade.\
 Use at: Netflix, eBay, GitHub, Instagram, Reddit, and more…
  
 ### Partitioning
 Cassandra uses consistent hashing for distributing the data across the nodes.
 The key of the partitioning calls partition key and it doesn’t have to be unique. For example, If I will want in the future to get all the employees with car = ‘BMW’,  I can choose car type as a key, and guarantee that those employees will stay on the same node. 
 ### Replication
-Replication factor - defines how many replicas. 
-Rack - a cluster of connected machines in a data center. Data Center contains multiple racks. The rack contains one or more nodes. 
-Replication strategy - defines which nodes the data replicated. 
-Simple Strategy - For any keyspace, define how many replicas. 
-For example, if we have an eight node cluster, and a replication factor of 3, then to find the owning nodes for a key we first hash that key to generate a token (which is just the hash of the key), and then we “walk” the ring in a clockwise fashion until we encounter three distinct nodes, at which point we have found all the replicas of that key.
+Replication factor - defines how many replicas.\
+Rack - a cluster of connected machines in a data center. Data Center contains multiple racks. The rack contains one or more nodes.\ 
+Replication strategy - defines which nodes the data replicated.\
+Simple Strategy - For any keyspace, define how many replicas.\
+For example, if we have an eight node cluster, and a replication factor of 3, then to find the owning nodes for a key we first hash that key to generate a token (which is just the hash of the key), and then we “walk” the ring in a clockwise fashion until we encounter three distinct nodes, at which point we have found all the replicas of that key.\
  
 
  
 Network topology strategy - allows a replication factor to be specified for each datacenter in the cluster. It also attempts to choose replicas within a datacenter from different racks to maximize availability. If the number of racks is greater than or equal to the replication factor for the data center, each replica is guaranteed to be chosen from a different rack. 
 
-Consistency Levels - 
-In Cassandra, you choose consistency level which allows the operator to pick reads (R) and writes (W)  behavior without knowing the replication factor. Generally, writes will be visible to subsequent reads when the read consistency level contains enough nodes to guarantee a quorum\ intersection with the write consistency level.
-Consistency levels  - [https://cassandra.apache.org/doc/latest/architecture/dynamo.html?highlight=rack#tunable-consistency]\
-Write operations  - are always sent to all replicas, regardless of consistency level. The consistency level simply controls how many responses the coordinator waits for before responding to the client.
-Read operations -  the coordinator generally only issues read commands to enough replicas to satisfy the consistency level. 
-Failure detection \
-based on a gossip protocol\
+**Consistency Levels**
+In Cassandra, you choose consistency level which allows the operator to pick reads (R) and writes (W) behavior without knowing the replication factor.\
+Generally, writes will be visible to subsequent reads when the read consistency level contains enough nodes to guarantee a quorum\ intersection with the write consistency level.\
+Consistency levels  - https://cassandra.apache.org/doc/latest/architecture/dynamo.html?highlight=rack#tunable-consistency\
+**Write path:**  are always sent to all replicas, regardless of consistency level. The consistency level simply controls how many responses the coordinator waits for before responding to the client.\
+**Read path:**  the coordinator generally only issues read commands to enough replicas to satisfy the consistency level.\
+Failure detection - based on a gossip protocol\
 ### Transactions
 Isolation - with compare and set (CAS) 
 ### Durability
-Commitlogs are an append only log of all mutations local to a Cassandra node. Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdowns. On startup, any mutations in the commit log will be 
-Memtables are in-memory structures where Cassandra buffers writes. In general, there is one active memtable per table. Memtables may be stored entirely on-heap or partially off-heap, depending on the configuration.
-applied to memtables.
-SSTables are the immutable data files that Cassandra uses for persisting data on disk.
-SSTables are flushed to disk from Memtables or are streamed from other nodes.
+Commitlogs are an append only log of all mutations local to a Cassandra node.\
+Any data written to Cassandra will first be written to a commit log before being written to a memtable. This provides durability in the case of unexpected shutdowns.\
+Memtables are in-memory structures where Cassandra buffers writes.\
+In general, there is one active memtable per table.\
+Memtables may be stored entirely on-heap or partially off-heap, depending on the configuration.\
+
+SSTables are the immutable data files that Cassandra uses for persisting data on disk.\
+SSTables are flushed to disk from Memtables or are streamed from other nodes.\
 
 ### CAP
 Cassandra chooses Availability and Partition Tolerance from the CAP. 
  
 # CouchBase
-Type: document store
-Couchbase Server is an open source, distributed data-platform.
-Language: N1QL (sql-like). Data document type: JSON\
-Data can be retained either in memory only, or in both memory and storage.  memory-first, async architecture\
+Type: document store\
+Couchbase Server is an open source, distributed data-platform.\
+Language: N1QL (sql-like).\
+Data document type: JSON\
+Data can be retained either in memory only, or in both memory and storage.\
+memory-first, async architecture\
 Data can be replicated across the nodes of the cluster / data centers\
-Couchbase is straightforward to deploy and manage. Features such as replication are built in with automatic sharding.
+Couchbase is straightforward to deploy and manage. Features such as replication are built in with automatic sharding.\
 Full text search \
-Parallel query processing -  for execute complex, long-running queries that contain complex joins, set, aggregation, and grouping operations.
-High availability - all operations can be done while the system remains online\
+Parallel query processing -  for execute complex, long-running queries that contain complex joins, set, aggregation, and grouping operations.\
+High availability - all operations can be done while the system remains online.\
 Use at: Linkedin, paypal,ebay\
 ***CouchBase Services:***
 The services can be deployed and maintained independently of one another (mix & match)\
@@ -311,7 +320,7 @@ The services can be deployed and maintained independently of one another (mix & 
  - Query: Parses queries specified in the N1QL query-language, executes the queries, and returns results. The Query Service interacts with both the Data and Index services.
  - Index: Creates indexes, for use by the Query Service.
  - Search: Creates indexes specially purposed for Full Text Search. This supports language-aware searching; allowing users to search for, say, the word beauties, and additionally obtain results for beauty and beautiful.
- - Analytics: Supports join, set, aggregation, and grouping operations; which are expected to be large, long-running, and highly consumptive of memory and CPU resources.
+ - Analytics: Supports join, set, aggregation, and grouping operations, which are expected to be large, long-running, and highly consumptive of memory and CPU resources.
  - Eventing: Supports javascript callbacks on mutations and deletions. 
 
  - Cluster Manager : control plane. runs on all the nodes of a cluster, maintaining node processes and coordinating cluster-wide operations like leader election . 
@@ -321,35 +330,37 @@ The services can be deployed and maintained independently of one another (mix & 
 
 
 ### Caching and Persistence
-Buckets: These store data persistently, as well as in memory. 
-Ephemeral buckets: To be used whenever persistence is not required
-Memcached buckets: Designed to be used alongside other database platforms, such as ones employing relational database technology. By caching frequently-used data, Memcached buckets reduce the number of queries a database-server must perform.
+Buckets: These store data persistently, as well as in memory.\
+Ephemeral buckets: To be used whenever persistence is not required\
+Memcached buckets: Designed to be used alongside other database platforms, such as ones employing relational database technology.\
+By caching frequently-used data, Memcached buckets reduce the number of queries a database-server must perform.
 
 
 ### Durability
-Clients writing to Couchbase Server can optionally specify durability requirements, which instruct Couchbase Server to update the specified document on multiple nodes in memory and/or disk locations across the cluster, before considering the write to be committed. The greater the number of memory and/or disk locations specified in the requirements, the greater the level of durability achieved.
+Clients writing to Couchbase Server can optionally specify durability requirements, which instruct Couchbase Server to update the specified document on multiple nodes in memory and/or disk locations across the cluster, before considering the write to be committed.\ The greater the number of memory and/or disk locations specified in the requirements, the greater the level of durability achieved.
 
-### CAP
-Couchbase Server acts like a CP system in its default configuration\
-This is because any access to a given key (read, write, update, delete) is always directed to the node that hosts that active data at that point in time\
+### CAP - CP
+Couchbase Server acts like a CP system in its default configuration. This is because any access to a given key (read, write, update, delete) is always directed to the node that hosts that active data at that point in time\
 Any write is also replicated within the cluster, but these replicas are primarily for the purpose of high availability and by default do not service any traffic until made active.
 If a single node fails, the data on a node that failed will not accept writes until the node is failed over, although reads can be serviced from replicas if desired.
 ### Clustering
-read and write directly to database nodes (no router). 
-Couchbase Server has a flat topology with a single node type. All the nodes play the same role in a cluster, that is, all the nodes are equal and communicate to each other on demand. One node is configured with several parameters as a single-node cluster. The other nodes join the cluster and pull its configuration. After that, the cluster is operated by connecting to any of the nodes via Web UI or CLI. 
+read and write directly to database nodes (by the cluster Manager).\
+Couchbase Server has a flat topology with a single node type. All the nodes play the same role in a cluster, that is, all the nodes are equal and communicate to each other on demand.\
+One node is configured with several parameters as a single-node cluster. The other nodes join the cluster and pull its configuration. After that, the cluster is operated by connecting to any of the nodes via Web UI or CLI. 
  
 ### Replication
-Up to three replica buckets can be defined for every bucket. Each replica itself is also implemented as 1024 vBuckets.
-Typically, only active vBuckets are accessed for read and write operations, although vBuckets are able to support read requests. 
+Up to three replica buckets can be defined for every bucket.\
+Each replica itself is also implemented as 1024 vBuckets.\
+Typically, only active vBuckets are accessed for read and write operations, although vBuckets are able to support read requests.\
 vBuckets receive a continuous stream of mutations from the active vBucket and are kept constantly up to date. 
 
  
 ### Partitioning
-Automatic sharding
-shards calls vBackets. 
-The cluster Manager keep vMap (Hash Table) that maps vBacket to node. 
-key -> hash (0-1023 values) = vBacket -> node.
-Couchbase partitions data into 1,024 virtual buckets, or vBuckets, and assigns them to nodes.
+Automatic sharding\
+shards calls vBackets.\
+The cluster Manager keep vMap (Hash Table) that maps vBacket to node.\
+key -> hash (0-1023 values) = vBacket -> node.\
+Couchbase partitions data into 1,024 virtual buckets, or vBuckets, and assigns them to nodes.\
 Like MongoDB chunks, vBuckets store all data within a specific range. However, Couchbase Server assigns all 1,024 virtual buckets when it is started, and it will not reassign vBuckets unless an administrator initiates the rebalancing process.
 
 Couchbase Server clients maintain a cluster map that maps vBuckets to nodes. As a result, there is no need for routers or config servers. Clients communicate directly with nodes.
@@ -358,7 +369,7 @@ Couchbase Server clients maintain a cluster map that maps vBuckets to nodes. As 
 ***Failure detection***
 Failover can be performed manually or automatically using the built-in automatic failover process. Auto failover acts after a preset time, when a node in the cluster becomes unavailable. 
 ### Transactions
-Insertion, mutation, and removal of multiple documents can be staged inside a transaction.
+Insertion, mutation, and removal of multiple documents can be staged inside a transaction.\
 Until the transaction is committed, these changes will not be visible to other transactions, or any other part of the Couchbase Data Platform. (dirty reads)
  
 ***Full text search***
@@ -371,10 +382,10 @@ words/documents.
 
 
 ### notes - 
- Availability - the percentage of time that an asset is operating, compared to its total scheduled operation time. Alternatively, availability can be defined as the duration of time that a plant or particular equipment is able to perform its intended tasks.
- Reliability - Reliability quantifies the likelihood of equipment to operate as intended without disruptions or downtime. In other words, reliability can be seen as the probability of success and the dependability of an asset to continuously be operational, without failures, for a period of time.
-Durability - Durability  refers to long-term data protection, i.e. the stored data does not suffer from bit rot, degradation or other corruption. Rather than focusing on hardware redundancy, it is concerned with data redundancy so that data is never lost or compromised.
-Distributed Hashing: server = hash (key) modulo (number of servers)
+ **Availability -** the percentage of time that an asset is operating, compared to its total scheduled operation time. Alternatively, availability can be defined as the duration of time that a plant or particular equipment is able to perform its intended tasks.\
+**Reliability -** Reliability quantifies the likelihood of equipment to operate as intended without disruptions or downtime. In other words, reliability can be seen as the probability of success and the dependability of an asset to continuously be operational, without failures, for a period of time.\
+**Durability -** Durability  refers to long-term data protection, i.e. the stored data does not suffer from bit rot, degradation or other corruption. Rather than focusing on hardware redundancy, it is concerned with data redundancy so that data is never lost or compromised.\
+**Distributed Hashing -** server = hash (key) modulo (number of servers)
 Consistent Hashing : Distribution of data across a set of nodes in such a way that minimizes the re-mapping/ reorganization of data when nodes are added or removed
 
 
