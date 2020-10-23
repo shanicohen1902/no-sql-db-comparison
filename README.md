@@ -62,6 +62,8 @@ Similar to key-value.  Store data in structured formats called documents, often 
  - If the data model needs to change, only the affected documents need to be updated 
  - Horizontally Scalable
  
+![column wide](https://user-images.githubusercontent.com/58383975/97003750-96639480-1544-11eb-912e-8902cbae8ffc.png)
+ 
 Examples – MongoDB, CouchDB
 
 **Document Design Considerations**\
