@@ -13,12 +13,14 @@
 
 # NoSQL Db characteristics
 
- - Semi-structured/ unstructured
+ - Semi-structured/ unstructured. 
+If your data requirements aren’t clear at the outset or if you’re dealing with massive amounts of unstructured data, you may not have the luxury of developing a relational database with clearly defined schema. Enter non-relational databases, which offer much greater flexibility than their traditional counterparts. Think of non-relational databases more like file folders, assembling related information of all types. If a WordPress blog used a NoSQL database, each file could store data for a blog post: social likes, photos, text, metrics, links, and more.
  - Limited transactions support (different for each product)
- - Scale horizontally ability
- - Fast – high performance
+ - Scale horizontally ability. 
+ NoSQL databases are designed to be scaled across multiple data centers / clusters
+ - Fast – high performance. 
  - Querying language – not SQL!
- - Capabilities to store large volume of data (in Terabyte range)
+ - Capabilities to store large volume of data 
  - When aggregation is natural , the development make easier.
  - Database denormalization - Query first approach. design our tables for queries.
  - no joins - read or write to one table. The process of multiple data across tables calls denormalization. 
