@@ -13,17 +13,20 @@
 
 # NoSQL Db characteristics
 
- - Semi-structured/ unstructured. 
+There are many NoSQL solutions around, each one with its own strengths and weaknesses, so the following must be taken with a grain of salt. 
+ - Semi-structured/ unstructured schema.   
 If your data requirements aren’t clear at the outset or if you’re dealing with massive amounts of unstructured data, you may not have the luxury of developing a relational database with clearly defined schema. Enter non-relational databases, which offer much greater flexibility than their traditional counterparts. Think of non-relational databases more like file folders, assembling related information of all types. If a WordPress blog used a NoSQL database, each file could store data for a blog post: social likes, photos, text, metrics, links, and more.
- - Limited transactions support (different for each product)
+ - Limited transactions support (different for each product). 
+ Transactions require ACID properties of how DBs perform user operations. ACID restricts how scalability can be improved: most of the NoSQL tools relax consistency criteria of the operatioins to get fault-tolerance and availability for scaling, which makes implementing ACID transactions very hard.
  - Scale horizontally ability. 
- NoSQL databases are designed to be scaled across multiple data centers / clusters
- - Fast – high performance. 
+ NoSQL databases are designed to be scaled across multiple data centers / clusters. They usually try improving scalability of the data store by distributing data processing. 
+ - Fast – high performance.  
+no joins - read or write to one table. The process of multiple data across tables calls denormalization.  
+Many NoSQL databases rely on denormalization and try to optimize for the denormalized case. For instance, say you are reading a blog post together with its comments in a document-oriented database. Often, the comments will be saved together with the post itself. This means that it will be faster to retrieve all of them together, as they are stored in the same place and you do not have to perform a join.
  - Querying language – not SQL!
- - Capabilities to store large volume of data 
- - When aggregation is natural , the development make easier.
+ - Capabilities to store large volume of data - scale out
+ - In cases that aggregation is natural , the development make easier.
  - Database denormalization - Query first approach. design our tables for queries.
- - no joins - read or write to one table. The process of multiple data across tables calls denormalization. 
 **We need to understand the toolset for each Database. Find a solution that could answer our problem.** 
 ## Considerations of choosing Database:
 Requirements - how do we need to read the data. Do we need schema type?
