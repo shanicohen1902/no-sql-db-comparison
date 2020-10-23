@@ -145,11 +145,7 @@ Partition tolerance - obviously…
 Starting in MongoDB 4.0, multi-document transactions are available for replica sets.
 Atomic - Multi-document transactions are atomic. A transaction will not commit some of its changes while rolling back others.
 
-
-
-
-
-
+  ![mongo sharding](https://user-images.githubusercontent.com/58383975/97004874-58677000-1546-11eb-887c-ca1d73eb7498.png)
 
 # Redis
 type: key-value\
@@ -211,6 +207,7 @@ Inverted index: Instead of pages -> word, word -> pages
 Search: title=”art” -> search for all the documents 
 TF-ITF for relevance 
 
+  ![lucene terms](https://user-images.githubusercontent.com/58383975/97004885-5bfaf700-1546-11eb-809e-1bccf38d722e.png)
 
 # Elasticsearch
 Search engine based on Lucene.
@@ -226,6 +223,8 @@ Term - A term is an exact value that is indexed in Elasticsearch. Terms can be s
 Index – Like a DB table. Contains inverted indexes that let you search across all documents. Manages as a collection of shards - an index is a logical namespace that points to primary and replica shards.\
 Type – type defines the schema and mapping shard by documents that represent the same thing. (A log entry, an article…). In Elastic 6, only one type is allowed per index.
 
+  ![lucene terms](https://user-images.githubusercontent.com/58383975/97004991-7c2ab600-1546-11eb-909f-32074b852036.png)
+
 Licence: Apache
 ### Partitioning
 A shard is a single Lucene instance. It is a low-level “worker” unit which is managed automatically by Elasticsearch.\
@@ -240,7 +239,7 @@ Automatic failover. Elastic selects a new primary\
 Scale writes - The number of primary Shards cannot be changed later. It is difficult to scale writes. In the worst-case – re-index.\
 Read heavy is a good case – Add more replicas.
 
-
+  ![elasticsearch topology](https://user-images.githubusercontent.com/58383975/97004999-7f25a680-1546-11eb-9b64-e1d04df75948.png)
 
 # Cassandra
 type: column-oriented DB\
@@ -263,6 +262,8 @@ Query Language: CQ,  an SQL-like language.\
  - Partition key: a key all rows in Cassandra must-have. All performant queries supply the partition key in the query.
  - Row: a collection of columns identified by a unique primary key.
  - Column: A single datum with a type that belongs to a row.
+ 
+  ![cassandra terms](https://user-images.githubusercontent.com/58383975/97005000-7fbe3d00-1546-11eb-81b7-ebe558e32ee3.png)
 
 In Cassandra, users can safely add columns to existing Cassandra databases while remaining confident that query performance will not degrade.\
 Use at: Netflix, eBay, GitHub, Instagram, Reddit, and more…
@@ -273,13 +274,15 @@ The key of the partitioning calls partition key and it doesn’t have to be uniq
 ### Replication
 Replication factor - defines how many replicas.\
 Rack - a cluster of connected machines in a data center. Data Center contains multiple racks. The rack contains one or more nodes.\ 
-Replication strategy - defines which nodes the data replicated.\
-Simple Strategy - For any keyspace, define how many replicas.\
+**Replication strategy - defines which nodes the data replicated:**\
+1. Simple Strategy - For any keyspace, define how many replicas.\
 For example, if we have an eight node cluster, and a replication factor of 3, then to find the owning nodes for a key we first hash that key to generate a token (which is just the hash of the key), and then we “walk” the ring in a clockwise fashion until we encounter three distinct nodes, at which point we have found all the replicas of that key.
  
+ ![cassandra network topology](https://user-images.githubusercontent.com/58383975/97005004-80ef6a00-1546-11eb-9986-ab1f0428f6ee.png)
 
- 
-Network topology strategy - allows a replication factor to be specified for each datacenter in the cluster. It also attempts to choose replicas within a datacenter from different racks to maximize availability. If the number of racks is greater than or equal to the replication factor for the data center, each replica is guaranteed to be chosen from a different rack. 
+2. Network topology strategy - allows a replication factor to be specified for each datacenter in the cluster. It also attempts to choose replicas within a datacenter from different racks to maximize availability. If the number of racks is greater than or equal to the replication factor for the data center, each replica is guaranteed to be chosen from a different rack. 
+
+ ![cassandra network topology](https://user-images.githubusercontent.com/58383975/97005005-80ef6a00-1546-11eb-9173-c8c1f2e3c89f.png)
 
 **Consistency Levels**
 In Cassandra, you choose consistency level which allows the operator to pick reads (R) and writes (W) behavior without knowing the replication factor.\
@@ -300,6 +303,8 @@ Memtables may be stored entirely on-heap or partially off-heap, depending on the
 
 SSTables are the immutable data files that Cassandra uses for persisting data on disk.\
 SSTables are flushed to disk from Memtables or are streamed from other nodes.
+
+![partitioning](https://user-images.githubusercontent.com/58383975/97005007-81880080-1546-11eb-918b-f5836f3267c3.png)
 
 ### CAP
 Cassandra chooses Availability and Partition Tolerance from the CAP. 
@@ -329,8 +334,8 @@ The services can be deployed and maintained independently of one another (mix & 
  - Cluster Manager : control plane. runs on all the nodes of a cluster, maintaining node processes and coordinating cluster-wide operations like leader election . 
  - Master Services. rebalance, auto failover, sharding/ data partitioning
  - Bucket services
-
-
+ 
+ ![couchbase servuces](https://user-images.githubusercontent.com/58383975/97005011-82209700-1546-11eb-85ad-37a0e1acb033.png)
 
 ### Caching and Persistence
 Buckets: These store data persistently, as well as in memory.\
@@ -338,6 +343,7 @@ Ephemeral buckets: To be used whenever persistence is not required\
 Memcached buckets: Designed to be used alongside other database platforms, such as ones employing relational database technology.\
 By caching frequently-used data, Memcached buckets reduce the number of queries a database-server must perform.
 
+![partitioning](https://user-images.githubusercontent.com/58383975/97005017-82b92d80-1546-11eb-9e77-e8d3faea711b.png)
 
 ### Durability
 Clients writing to Couchbase Server can optionally specify durability requirements, which instruct Couchbase Server to update the specified document on multiple nodes in memory and/or disk locations across the cluster, before considering the write to be committed.  The greater the number of memory and/or disk locations specified in the requirements, the greater the level of durability achieved.
@@ -357,6 +363,8 @@ Each replica itself is also implemented as 1024 vBuckets.\
 Typically, only active vBuckets are accessed for read and write operations, although vBuckets are able to support read requests.\
 vBuckets receive a continuous stream of mutations from the active vBucket and are kept constantly up to date. 
 
+![replication coucbase](https://user-images.githubusercontent.com/58383975/97005020-8351c400-1546-11eb-9178-968b8477d3d5.png)
+
  
 ### Partitioning
 Automatic sharding\
@@ -368,7 +376,8 @@ Like MongoDB chunks, vBuckets store all data within a specific range. However, C
 
 Couchbase Server clients maintain a cluster map that maps vBuckets to nodes. As a result, there is no need for routers or config servers. Clients communicate directly with nodes.
 
- 
+![partitioning](https://user-images.githubusercontent.com/58383975/97005023-83ea5a80-1546-11eb-8b55-1b37d7f42e72.png)
+
 ***Failure detection***
 Failover can be performed manually or automatically using the built-in automatic failover process. Auto failover acts after a preset time, when a node in the cluster becomes unavailable. 
 ### Transactions
