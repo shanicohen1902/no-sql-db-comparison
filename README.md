@@ -30,17 +30,19 @@ Many NoSQL databases rely on denormalization and try to optimize for the denorma
 **We need to understand the toolset for each Database. Find a solution that could answer our problem.** 
 ## Considerations of choosing Database:
 Requirements - how do we need to read the data. Do we need schema type?
- - Non-functional requirements. 
+Non-functional requirements:  
  - Performance
  - Scale – data volume + load
  - Consistency vs Availability
  - Cost – consider software cost + maintenance
   - Integration considerations – Existing technologies that need to integrate. 
  - Existing dev team skills
- - CAP – choose only two: AP/AC
-	 - Consistency
-   - Availability
-   - Partition tolerance
+ - CAP:  
+  The CAP Theorem, states that databases can only ever fulfil two out of three elements:
+   -  Consistency – that reads are always up to date, which means any client making a request to the database will get the same view of data.
+   -  Availability – database requests always receive a response (when valid).
+   -  Partition tolerance – that a network fault doesn’t prevent messaging between nodes.
+In the context of distributed (NoSQL) databases, this means there is always going to be a trade-off between consistency and availability. This is because distributed systems are always necessarily partition tolerant (ie. it simply wouldn’t be a distributed database if it wasn’t partition tolerant.)
 On distributed NoSQL databases, basically you need to choose between AP to CP. Partition tolerance is a basic requirement from distributed system.
  - Keep it simple…
 # NoSQL Database types
@@ -66,9 +68,7 @@ Similar to key-value.  Store data in structured formats called documents, often 
  - Easy to develop when aggregation is needed
  - If the data model needs to change, only the affected documents need to be updated 
  - Horizontally Scalable
- 
-![column wide](https://user-images.githubusercontent.com/58383975/97004758-2f46df80-1546-11eb-8a87-bffd4cdb5758.png)
- 
+  
 Examples – MongoDB, CouchDB
 
 **Document Design Considerations**\
@@ -78,22 +78,26 @@ potentially allows information to be read or written in a single operation. This
  - large number of simple documents. Appropriate when data-size needs to be kept small, in order to reduce latency. Documents can refer to each other by key.
 
 ### Column Databases
-A column-oriented database stores columns sequentially. Each column will be stored in sequential blocks. Good for analytical queries that perform aggregate operations (column actions).\
-When there is a need for retrieval a few columns from a table with many columns, Row-Oriented Database has to skip over unnecessary data. 
+A column-oriented database stores **columns** sequentially. Each column will be stored in sequential blocks. 
+For analytical queries that perform aggregate operations over a small number of columns retrieving data in this format is extremely fast. As PC storage is optimized for block access, by storing the data beside each other we exploit locality of reference. On hard disk drives this is partiularly important which due to their performance characteristics provide optimal performace for sequential access.
+When there is a need for retrieval a few columns from a table with many columns, Row-Oriented Database has to skip over unnecessary data.
+
  - Store & analyze big Data sets
  - Columns data stores together
  - Quick at aggregate queries (sum, average, min, max, etc.). We read only the columns that uses in the query 
  - The data can be sorted/indexed 
  - Adding column – easy
  - Single row operations are slow (use batch, work with bulks). Saves storage: no need to define null/repeated data
+ 
+ ![column wide](https://user-images.githubusercontent.com/58383975/97004758-2f46df80-1546-11eb-8a87-bffd4cdb5758.png)
 
 Examples- Cassandra, InfiniDB, HBase
 
 ### Graph Databases
 Store and querying relationships between objects. Logical structure represents data relationships. \
 Edge - relationship. Edge have a direction.\
-Vertex - object\
- - ACID
+Vertex - object
+ - ACID support
  - Graph DB does not represent any aggregation. 
  - Relations can be many to many (no extra table)
  - Properties - On both edges and vertex, additional information can be stored (similar to fields). Flexible schema.
@@ -106,38 +110,35 @@ Vertex - object\
 Examples – Neo4j, Amazon Neptune
 
 # MongoDB
-Type: Document storage
+Type: Document storage\
+MongoDB is a NoSQL database, uses JSON-like (BSON) documents with optional schemas. It designed for ease of development and scaling
 
-MongoDB is a NoSQL database, uses JSON-like documents with optional schemas. It designed for ease of development and scaling.
-
-Mongo saves BSON (like JSON) as data. 
-Flex schema 
-Ability to querying the data itself (not only get it)
-Index support – fields/combination of fields/ special indexes. (obviously, only one can use for sharding). Automatically generated or provided by the developer. Must be unique
-Mongodb supports all CRUD
-More options – aggregation capabilities, bulk
-Good for store a lot/big of documents and analyze them
+ - Flex schema
+ - Ability to querying the data itself (not only get it)
+ - Index support – fields/combination of fields/ special indexes. (obviously, only one can use for sharding). Automatically generated or provided by the developer.   - Must be unique
+ - Mongodb supports all CRUD + More options – aggregation capabilities, bulk
+ - Good for store a lot/big of documents and analyze them
 License: AGDL
 
-Mongos – the router of Mongo. Responsible for routing the queries to the suitable shard. Mongos can be replicated 
+Mongos – the router of Mongo. Responsible for routing the queries to the suitable shard. Mongos can be replicated\
 Mongod – the primary daemon process. It handles data requests, manages data access, and performs background management operations. (Configuration server)
 
 ### Sharding
-By hash (better distribution) /by range (when need to query by range). The key couldn’t be changed!
+By hash (better distribution) /by range (when need to query by range). The key couldn’t be changed!\
 Auto sharding by Mongos - when a chunk size limits the threshold, mongo will immigrate data to another shard
 
-### Clustering
+  ![mongo sharding](https://user-images.githubusercontent.com/58383975/97004874-58677000-1546-11eb-887c-ca1d73eb7498.png)
 
-Single Master Architecture
- Auto re-election
- Asynchronous replication
+### Clustering
+Single Master Architecture\
+Auto re-election\
+Asynchronous replication
 
 **Write path:**
-To the primary node.  Asynchronous replication to the slave\
-Default - Success writing when the master succeeded. Option – write also to the majority/number of nodes.
+ To the primary node.  Asynchronous replication to the slave\
+Default - Success writing when the master succeeded. Option – write also to the majority/number of nodes.\
 **Read path:**
-By default, clients read from the primary. when the primary fails, the system unavailable. 
-
+ By default, clients read from the primary. when the primary fails, the system unavailable. 
 
 ### CAP – CP
 
@@ -150,26 +151,27 @@ Partition tolerance - obviously…
 Starting in MongoDB 4.0, multi-document transactions are available for replica sets.
 Atomic - Multi-document transactions are atomic. A transaction will not commit some of its changes while rolling back others.
 
-  ![mongo sharding](https://user-images.githubusercontent.com/58383975/97004874-58677000-1546-11eb-887c-ca1d73eb7498.png)
-
 # Redis
 type: key-value\
-Redis is an open source , in-memory data structure store, used as a database, cache and message broker.
-Cache or database?\
+Redis is an open source , in-memory data structure store, used as a database, cache and message broker. 
+**Cache or database?**\
 Cache – redis can be used as distributed or in memory\
-Primary store -Data can be persist to the disk to make redis safer (but also slower - trade-off)\
-Optional the data loads to the disk once in a while (snapshots - .rdb files), or saves to the log each change (AOF – Append only files).  Saves the commands log is more human friendly but its uses more space and expense performance. Save a snapshot is more data loss risky + slows the system when the save process works. Both/neither options can be used\
-Restore data from disk: If AOF used, by executing all the commands from it.
-Restore the data from a snapshot is faster\
-Supports different data structures – string, hashes, list, sets, sorted set.
+Primary store - Data can be persist to the disk to make redis safer (but also slower - trade-off)\
+Both/neither options can be used\
+
+The first persistent option is snapshots - data loads to the disk once in a while. (.rdb files). The second is saves to the log each change (AOF – Append only files).  
+Saves the commands log is more human friendly but its uses more space and expense performance. Save a snapshot is more data loss risky + slows the system when the save process works.    
+
+Restore data from disk:\
+If AOF used, by executing all the commands from it. 
+Snapshot - Restore the data from a snapshot is fast and simple. 
+
+Redis Supports different data structures – string, hashes, list, sets, sorted set.
 Bucketing – store multiples key-value couples in one hash (less key overhead)\
 Can be used as a pub-sub
 
   	Main point:  Fast!
 License: BSD
-	
-
-
 
 ### Transactions
 Isolation - A basic transaction provides the opportunity for one client to execute multiple commands without other clients interrupt them. 
