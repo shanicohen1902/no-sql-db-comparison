@@ -31,17 +31,16 @@ Many NoSQL databases rely on denormalization and try to optimize for the denorma
 ## Considerations of choosing Database:
 Requirements - how do we need to read the data. Do we need schema type?
 Non-functional requirements:  
- - Performance
- - Scale – data volume + load
- - Consistency vs Availability
- - Cost – consider software cost + maintenance
-  - Integration considerations – Existing technologies that need to integrate. 
+ - Performance. Performance requirements define how well the system performs certain functions under specific conditions. Examples are speed of response, throughput, execution time and storage capacity.
+ - Scalability. Database scalability is the ability of a database to handle changing demands by adding/removing resources. We need to considure the current data volume + feuture needs. At a high level, scalability help to improve availability and performance when demand is changing, especially when changes are unpredictable.
+ - Cost. consider software cost + maintenance. 
+ - Integration considerations. Existing technologies that need to integrate. 
  - Existing dev team skills
- - CAP:  
+ - **CAP**:  
   The CAP Theorem, states that databases can only ever fulfil two out of three elements:
-   -  Consistency – that reads are always up to date, which means any client making a request to the database will get the same view of data.
-   -  Availability – database requests always receive a response (when valid).
-   -  Partition tolerance – that a network fault doesn’t prevent messaging between nodes.
+   -  **Consistency** – that reads are always up to date, which means any client making a request to the database will get the same view of data.
+   -  **Availability** – database requests always receive a response (when valid).
+   -  **Partition tolerance** – that a network fault doesn’t prevent messaging between nodes.
 In the context of distributed (NoSQL) databases, this means there is always going to be a trade-off between consistency and availability. This is because distributed systems are always necessarily partition tolerant (ie. it simply wouldn’t be a distributed database if it wasn’t partition tolerant.)
 On distributed NoSQL databases, basically you need to choose between AP to CP. Partition tolerance is a basic requirement from distributed system.
  - Keep it simple…
@@ -58,7 +57,8 @@ On distributed NoSQL databases, basically you need to choose between AP to CP. P
  - No complex queries involving multiple keys or joins
  - Caching feature
 When to use?  The data that might be represented by a key-value like configuration, flags, Session management, User preferences\
-When to avoid? When there is need to interact with the data itself.\
+When to avoid? When there is need to interact with the data itself.
+
 Examples – Redis, Amazon DynamoDB, Aerospike
 ### Document store Database
 Similar to key-value.  Store data in structured formats called documents, often using formats like JSON, BSON, or XML.
@@ -107,6 +107,7 @@ Vertex - object
   - To other vertices
   - To edges
   - Filtering with traversals
+  
 Examples – Neo4j, Amazon Neptune
 
 # MongoDB
