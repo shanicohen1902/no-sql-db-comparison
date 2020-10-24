@@ -21,7 +21,7 @@ If your data requirements aren’t clear at the outset or if you’re dealing wi
  - Scale horizontally ability. 
  NoSQL databases are designed to be scaled across multiple data centers / clusters. They usually try improving scalability of the data store by distributing data processing. 
  - Fast – high performance.  
-no joins - read or write to one table. The process of multiple data across tables calls denormalization.  
+No joins - read or write to one table. The process of multiple data across tables calls denormalization.  
 Many NoSQL databases rely on denormalization and try to optimize for the denormalized case. For instance, say you are reading a blog post together with its comments in a document-oriented database. Often, the comments will be saved together with the post itself. This means that it will be faster to retrieve all of them together, as they are stored in the same place and you do not have to perform a join.
  - Querying language – not SQL!
  - Capabilities to store large volume of data - scale out
@@ -111,12 +111,13 @@ Examples – Neo4j, Amazon Neptune
 
 # MongoDB
 Type: Document storage\
-MongoDB is a NoSQL database, uses JSON-like (BSON) documents with optional schemas. It designed for ease of development and scaling
+MongoDB is a NoSQL database, uses JSON-like (BSON) documents with optional schemas. It designed for ease of development and scaling.
 
  - Flex schema
  - Ability to querying the data itself (not only get it)
- - Index support – fields/combination of fields/ special indexes. (obviously, only one can use for sharding). Automatically generated or provided by the developer.   - Must be unique
- - Mongodb supports all CRUD + More options – aggregation capabilities, bulk
+ - Index support – fields/combination of fields/ special indexes. (obviously, only one can use for sharding). Automatically generated or provided by the developer.    Must be unique
+ - Mongodb supports all CRUD + More options – aggregation capabilities, bulk.  
+ CRUD - create, read, update and delete
  - Good for store a lot/big of documents and analyze them
 License: AGDL
 
@@ -124,18 +125,23 @@ Mongos – the router of Mongo. Responsible for routing the queries to the suita
 Mongod – the primary daemon process. It handles data requests, manages data access, and performs background management operations. (Configuration server)
 
 ### Sharding
-By hash (better distribution) /by range (when need to query by range). The key couldn’t be changed!\
-Auto sharding by Mongos - when a chunk size limits the threshold, mongo will immigrate data to another shard
+1. By hash. Hashed sharding uses either a single field hashed index or a compound hashed index (New in 4.4) as the shard key to partition data across your cluster.  Hashed sharding provides a more even data distribution across the sharded cluster 
+2. by range (when need to query by range). Range-based sharding involves dividing data into contiguous ranges determined by the shard key values. In this model, documents with “close” shard key values are likely to be in the same chunk or shard. This allows for efficient queries where reads target documents within a contiguous range. However, both read and write performance may decrease with poor shard key selection. 
+The key couldn’t be changed!
+
+Auto sharding by Mongos - when a chunk size limits the threshold, mongo will immigrate data to another shard.  
+Range-based sharding is the default sharding methodology if no other options such as those required for Hashed Sharding or zones are configured.
 
   ![mongo sharding](https://user-images.githubusercontent.com/58383975/97004874-58677000-1546-11eb-887c-ca1d73eb7498.png)
 
 ### Clustering
-Single Master Architecture\
-Auto re-election\
-Asynchronous replication
+**Single Master Architecture** (also called master-slave)\
+Master-slave replication enables data from one database server (the master) to be replicated to one or more other database servers (the slaves). The master logs the updates, which then ripple through to the slaves. The slave outputs a message stating that it has received the update successfully, thus allowing the sending of subsequent updates. Master-slave replication can be either synchronous or asynchronous. The difference is simply the timing of propagation of changes. If the changes are made to the master and slave at the same time, it is synchronous. If changes are queued up and written later, it is asynchronous. The replication in mongo is asynchronous.
+
+Mogo auto re-election - Replica sets use elections to determine which set member will become primary (master). Replica sets can trigger an election in response to a variety of events. The replica set cannot process write operations until the election completes successfully. The replica set can continue to serve read queries if such queries are configured to run on secondaries.
 
 **Write path:**
- To the primary node.  Asynchronous replication to the slave\
+To the primary node.  Asynchronous replication to the slave\
 Default - Success writing when the master succeeded. Option – write also to the majority/number of nodes.\
 **Read path:**
  By default, clients read from the primary. when the primary fails, the system unavailable. 
@@ -143,16 +149,16 @@ Default - Success writing when the master succeeded. Option – write also to th
 ### CAP – CP
 
 (Default configuration)\
-Consistency - Reads and writes from master. to ensure consistency.
+Consistency - Reads and writes from master. In this way, Mongo ensure consistency.  
 Availability - when master falls system unavailable till new master re-elected (availability infected). 
-Partition tolerance - obviously…
 
 ### Transactions
 Starting in MongoDB 4.0, multi-document transactions are available for replica sets.
 Atomic - Multi-document transactions are atomic. A transaction will not commit some of its changes while rolling back others.
 
 # Redis
-type: key-value\
+type: key-value
+
 Redis is an open source , in-memory data structure store, used as a database, cache and message broker. 
 **Cache or database?**\
 Cache – redis can be used as distributed or in memory\
