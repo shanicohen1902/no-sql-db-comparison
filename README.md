@@ -1,9 +1,10 @@
-# no-sql-db-comparison
-
 # Select DB – how to?
 
+## About Databases
 [NoSQL Db characteristics](#nosql-db-characteristics) \
-[NoSQL Database Types](#nosql-database-types) 	\
+[NoSQL Database Types](#nosql-database-types)
+
+## NoSql databases comparison
 [MongoDB](#mongodb)	\
 [Redis](#redis) \
 [Elasticsearch](#elasticsearch) \
