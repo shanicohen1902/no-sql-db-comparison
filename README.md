@@ -1,6 +1,6 @@
 # Select DB – how to?
 
-## About Databases
+## About NoSql Databases
 [NoSQL Db characteristics](#nosql-db-characteristics) \
 [NoSQL Database Types](#nosql-database-types)
 
